@@ -24,6 +24,7 @@ class EditableServiceProvider extends ServiceProvider {
 		//
 		include __DIR__.'/routes.php';
         $this->app->make('Cyclegtx\LaravelEditableElement\EditableController');
+        $this->app->alias('laravel-editable-element-field', 'Cyclegtx\LaravelEditableElement\Field');
 	}
 
 }
