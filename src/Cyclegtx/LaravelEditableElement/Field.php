@@ -34,7 +34,8 @@ class Field {
                 "name"=>$name,
                 "id"=>$ins->getKey(),
                 "orm"=>get_class($ins),
-                "handler"=>get_called_class()
+                "handler"=>get_called_class(),
+                "csrf"=>csrf_token()
             );
         return htmlspecialchars(json_encode($data));
     }
