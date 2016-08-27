@@ -23,7 +23,7 @@ class EditableServiceProvider extends ServiceProvider {
 	{
 		//
 		include __DIR__.'/routes.php';
-        $this->app->make('cyclegtx\Editable\EditableController');
+        $this->app->make('Cyclegtx\LaravelEditableElement\EditableController');
 	}
 
 }
