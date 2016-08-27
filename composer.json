@@ -1,0 +1,20 @@
+{
+    "name": "cyclegtx/laravel-editable-element",
+    "description": "Editable input field",
+    "authors": [
+        {
+            "name": "Han Li",
+            "email": "83872309@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "laravelcollective/html": "5.*",
+    },
+    "autoload": {
+        "psr-0": {
+            "Cyclegtx\\LaravelEditableElement": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
