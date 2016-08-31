@@ -15,6 +15,5 @@
         "psr-0": {
             "Cyclegtx\\LaravelEditableElement": "src/"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
