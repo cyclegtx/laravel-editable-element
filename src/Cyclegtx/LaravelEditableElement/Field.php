@@ -1,62 +1,78 @@
 <?php namespace Cyclegtx\LaravelEditableElement;
 
 class Field {
+     /**
+     * Name of the field
+     *
+     * @var
+     */
+    public $name;
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	protected $Model=null;
-    protected static $url = 'cyclegtx/editable'; 
-	protected $ORM;
-    public function __construct($id)
+    /**
+     * Type of the field
+     *
+     * @var
+     */
+    public $type = 'text';
+
+    public $parent;
+
+    /**
+     * All options for the field
+     *
+     * @var
+     */
+    public $options = [];
+
+
+    /**
+     * @param             $name
+     * @param             $type
+     * @param Form        $parent
+     * @param array       $options
+     */
+    public function __construct($name, $type,CEditable $parent, array $options = [])
     {
-    	$modelObj = new $this->Model();
-        $this->ORM = $modelObj->find($id);
+        $this->name = $name;
+        $this->type = $type;
+        $this->parent = $parent;
+        $this->options = $options;
     }
-    protected static function getUrlClassName($class){
-        return str_replace("\\",":",$class);
+    /**
+     * @param array $options
+     * @param bool  $showLabel
+     * @param bool  $showField
+     * @param bool  $showError
+     * @return string
+     */
+    public function render($ins = null)
+    {
+        $name = $this->name;
+        if(in_array($this->type,['text','number','email'])){
+            return '<input type="'.$this->type
+                    .'" onChange="cEditable(this)" data-cEditable="'
+                    .$this->buildData($ins).'" value="'.$ins->$name.'">';
+        }
     }
-    protected static function getUrl($name,$id,$class){
-    	return url('cyclegtx/editable').'/'.static::getUrlClassName($class).'/'.$name.'/'.$id;
-    }
-    public static function text($ins,$name){
-        return '<input type="text" onChange="changeContent(this)" data-editable-data="'.static::buildEditableData($ins,$name).'" value="'.$ins->$name.'">';
-
-    }
-    public static function number($ins,$name){
-        return '<input type="number" onChange="changeContent(this)" data-editable-data="'.static::buildEditableData($ins,$name).'" value="'.$ins->$name.'">';
-    }
-    public static function buildEditableData($ins,$name){
+    public function buildData($ins){
         $data = array(
-                "url"=>url(static::$url),
-                "name"=>$name,
+                "url"=>url($this->parent->route),
+                "name"=>$this->name,
                 "id"=>$ins->getKey(),
-                "orm"=>get_class($ins),
-                "handler"=>get_called_class(),
                 "csrf"=>csrf_token()
             );
         return htmlspecialchars(json_encode($data));
     }
-    public static function editPreHandler($data,$content){
-        $ORM = $data['orm'];
-        $name = $data['name'];
-        $id = $data['id'];
-        if(get_called_class() != get_class()){
-            $classname = get_called_class();
-            $ins = new $classname($id);
-            $ins->edit($name,$content);
+    public function edit($id,$value){
+        $name = $this->name;
+        $ORM = $this->parent->Model;
+        $ins = $ORM::find($id);
+        $ins->$name = $value;
+        if($ins->save()){
+            return $this->parent->success();
         }else{
-            $ins = $ORM::find($id);
-            $ins->$name = $content;
-            $res = $ins->save();
-            dump($res);
+            return $this->parent->fail();
         }
-    }
-    public function __set($name,$value){
-    	$this->ORM->$name = $value;
-    	$res = $this->ORM->save();
-    	return $res;
+        
     }
 }

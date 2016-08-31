@@ -2,7 +2,7 @@
 
 use Illuminate\Support\ServiceProvider;
 
-class EditableServiceProvider extends ServiceProvider {
+class CEditableServiceProvider extends ServiceProvider {
 
 	/**
 	 * Bootstrap the application services.
@@ -11,7 +11,9 @@ class EditableServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		//
+	    $this->publishes([
+	        __DIR__.'/js' => base_path('public/js/ceditable'),
+	    ]);
 	}
 
 	/**
@@ -22,9 +24,6 @@ class EditableServiceProvider extends ServiceProvider {
 	public function register()
 	{
 		//
-		include __DIR__.'/routes.php';
-        $this->app->make('Cyclegtx\LaravelEditableElement\EditableController');
-        $this->app->alias('laravel-editable-element-field', 'Cyclegtx\LaravelEditableElement\Field');
 	}
 
 }
