@@ -55,8 +55,9 @@ class Field {
         }
     }
     public function buildData($ins){
+        $url = isset($this->options['route'])?$this->options['route']:$this->parent->route;
         $data = array(
-                "url"=>url($this->parent->route),
+                "url"=>url($url),
                 "name"=>$this->name,
                 "id"=>$ins->getKey(),
                 "csrf"=>csrf_token()
